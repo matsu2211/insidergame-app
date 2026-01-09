@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/insidergame-app/static/css/main.31d6cfe0.css",
-    "main.js": "/insidergame-app/static/js/main.2b58ab3e.js",
+    "main.js": "/insidergame-app/static/js/main.3efbb64b.js",
     "static/js/453.27ec69d2.chunk.js": "/insidergame-app/static/js/453.27ec69d2.chunk.js",
     "index.html": "/insidergame-app/index.html",
-    "main.2b58ab3e.js.map": "/insidergame-app/static/js/main.2b58ab3e.js.map",
+    "main.3efbb64b.js.map": "/insidergame-app/static/js/main.3efbb64b.js.map",
     "453.27ec69d2.chunk.js.map": "/insidergame-app/static/js/453.27ec69d2.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.31d6cfe0.css",
-    "static/js/main.2b58ab3e.js"
+    "static/js/main.3efbb64b.js"
   ]
 }
