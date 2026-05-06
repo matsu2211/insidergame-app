@@ -161,8 +161,12 @@ const Home = () => {
           fullWidth
           onClick={handleStartGame}
           disabled={state.playerNames.length < 3}
+          sx={{ display: 'flex', flexDirection: 'column', py: 1 }}
         >
-          ゲーム開始
+          <Box>ゲーム開始</Box>
+          <Typography variant="caption" sx={{ color: '#ff1744', fontWeight: 'bold' }}>
+            画面共有を停止してください
+          </Typography>
         </Button>
         <Button
           variant="outlined"

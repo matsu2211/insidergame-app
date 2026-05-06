@@ -22,21 +22,21 @@ const RoleCheck = () => {
   const { state, dispatch } = useGame();
   const navigate = useNavigate();
   const { players, topic, insiderCount } = state;
+  const [showTopic, setShowTopic] = useState(false);
   const [showRoles, setShowRoles] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [customTopic, setCustomTopic] = useState('');
 
-  const handleCopyToClipboard = () => {
-    const insiders = players.filter(p => p.role === 'insider').map(p => p.name).join(', ');
-    const textToCopy = `
-お題: ${topic}
----
-インサイダー (${insiderCount}人): ${insiders}
----
-プレイヤー:
-${players.map(p => `- ${p.name}`).join('\n')}
-    `;
-    navigator.clipboard.writeText(textToCopy.trim());
+  const handleCopyPlayerInfo = (player: { name: string; role: string }) => {
+    let roleName = player.role === 'insider' ? 'インサイダー' : '市民';
+    let includeTopic = player.role === 'insider';
+
+    let textToCopy = `【インサイダーゲーム】\nプレイヤー: ${player.name}\nあなたの役割: ${roleName}`;
+    if (includeTopic) {
+      textToCopy += `\nお題: ${topic}`;
+    }
+    
+    navigator.clipboard.writeText(textToCopy);
     setSnackbarOpen(true);
   };
 
@@ -72,11 +72,24 @@ ${players.map(p => `- ${p.name}`).join('\n')}
           </IconButton>
         </Stack>
 
-        <Typography variant="h4" component="p" sx={{ fontWeight: 'bold', mb: 2 }}>
-          {topic}
-        </Typography>
+        {!showTopic ? (
+          <Button
+            variant="outlined"
+            onClick={() => setShowTopic(true)}
+            sx={{ my: 1, fontWeight: 'bold', display: 'flex', flexDirection: 'column', py: 1, width: '100%' }}
+          >
+            <Box>お題を表示する</Box>
+            <Typography variant="caption" sx={{ color: '#ff1744', fontWeight: 'bold' }}>
+              画面共有を停止してください
+            </Typography>
+          </Button>
+        ) : (
+          <Typography variant="h4" component="p" sx={{ fontWeight: 'bold', mb: 2 }}>
+            {topic}
+          </Typography>
+        )}
         
-        <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+        <Stack direction="row" spacing={1} sx={{ alignItems: 'center', mt: 2 }}>
           <TextField 
             label="自由にお題を設定"
             variant="outlined"
@@ -91,7 +104,7 @@ ${players.map(p => `- ${p.name}`).join('\n')}
             disabled={!customTopic.trim()}
             sx={{ fontWeight: 'bold' }}
           >
-            お題を設定
+            設定
           </Button>
         </Stack>
       </Box>
@@ -99,16 +112,28 @@ ${players.map(p => `- ${p.name}`).join('\n')}
       <Divider sx={{ my: 3 }} />
 
       <Typography variant="h6">プレイヤーの役割</Typography>
-      {!showRoles && (
-        <Button variant="contained" onClick={() => setShowRoles(true)} sx={{ my: 2, fontWeight: 'bold' }}>
-          役割を表示する
+      {!showRoles ? (
+        <Button
+          variant="contained"
+          onClick={() => setShowRoles(true)}
+          sx={{ my: 2, fontWeight: 'bold', display: 'flex', flexDirection: 'column', py: 1, width: '100%' }}
+        >
+          <Box>役割を表示する</Box>
+          <Typography variant="caption" sx={{ color: '#ff1744', fontWeight: 'bold' }}>
+            画面共有を停止してください
+          </Typography>
         </Button>
-      )}
-      
-      {showRoles && (
+      ) : (
         <List>
           {players.map((player) => (
-            <ListItem key={player.name}>
+            <ListItem
+              key={player.name}
+              secondaryAction={
+                <IconButton edge="end" aria-label="copy" onClick={() => handleCopyPlayerInfo(player)}>
+                  <ContentCopyIcon />
+                </IconButton>
+              }
+            >
               <ListItemText 
                 primary={player.name}
                 secondary={player.role === 'insider' ? 'インサイダー' : '市民'}
@@ -119,14 +144,6 @@ ${players.map(p => `- ${p.name}`).join('\n')}
       )}
 
       <Box sx={{ mt: 4, display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <Button
-          variant="outlined"
-          startIcon={<ContentCopyIcon />}
-          onClick={handleCopyToClipboard}
-          sx={{ fontWeight: 'bold' }}
-        >
-          お題と役割をコピー
-        </Button>
         <Button
           variant="contained"
           color="primary"

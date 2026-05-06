@@ -143,11 +143,12 @@ const gameReducer = (state: GameState, action: GameAction): GameState => {
       };
     case 'SETUP_GAME':
       // プレイヤーの役割を割り当てる
-      const shuffledPlayers = [...state.playerNames].sort(() => Math.random() - 0.5);
-      const insiders = shuffledPlayers.slice(0, state.insiderCount);
+      const shuffledNames = [...state.playerNames].sort(() => Math.random() - 0.5);
+      const insiderNames = shuffledNames.slice(0, state.insiderCount);
+      
       const newPlayers: Player[] = state.playerNames.map(name => ({
         name,
-        role: insiders.includes(name) ? 'insider' : 'citizen',
+        role: insiderNames.includes(name) ? 'insider' : 'citizen',
       }));
 
       return {
